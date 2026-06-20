@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clarity Matrix</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap');
+
+        /* Minimalist Pastel Theme */
+        :root {
+            --bg-body: #fdfbf7; /* Warm soft cream */
+            --bg-surface: #ffffff; /* Pure white for cards */
+            --text-main: #334155;
+            --text-muted: #8ca3ba;
+            --border-light: #e8eef3; 
+            --blue-primary: #a3b1c6; /* Dusty pastel blue */
+            --blue-hover: #8e9db3;
+            --blue-light: #f4f6f9;
+            --success: #b5c99a; /* Pastel sage */
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --transition: all 0.25s ease-in-out;
+            
+            /* Quadrant Pastel Colors */
+            --q1-bg: #fff5f5; /* Soft blush */
+            --q1-border: #ffe3e3;
+            --q2-bg: #f5f7ff; /* Soft periwinkle */
+            --q2-border: #e3e8ff;
+            --q3-bg: #fffbf0; /* Soft buttermilk */
+            --q3-border: #ffecb3;
+            --q4-bg: #f4fbf4; /* Soft mint */
+            --q4-border: #dff2df;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Header & Controls */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500; /* Increased from 200 to 500 for a bolder, more balanced look */
+            font-size: 32px;
+            letter-spacing: 8px;
+            margin: 0;
+            color: var(--text-main);
+            text-align: center;
+            flex-grow: 1;
+            text-transform: uppercase;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .secondary-btn {
+            background: white;
+            border: 1px solid var(--border-light);
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .secondary-btn:hover {
+            color: var(--blue-primary);
+            border-color: var(--blue-primary);
+        }
+
+        /* Input Controls */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-surface);
+            padding: 16px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            border: 1px solid var(--border-light);
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        /* Search and Filter Bar */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 12px 16px;
+            background: transparent;
+            gap: 16px;
+        }
+
+        .search-box {
+            flex-grow: 1;
+            max-width: 300px;
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 8px;
+        }
+
+        .filter-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid var(--border-light);
+            background: var(--bg-surface);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-pill.active {
+            background: var(--blue-primary);
+            color: white;
+            border-color: var(--blue-primary);
+        }
+
+        input[type="text"], select {
+            padding: 12px 16px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+            background-color: #fafafa;
+        }
+
+        .search-box input {
+            padding: 8px 16px;
+            font-size: 14px;
+            width: 100%;
+            border-radius: 20px;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--blue-primary);
+            background-color: var(--bg-surface);
+            box-shadow: 0 0 0 3px var(--blue-light);
+        }
+
+        .controls input[type="text"] { flex-grow: 1; min-width: 250px; }
+        select { cursor: pointer; }
+
+        button.primary-btn {
+            background-color: var(--blue-primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        button.primary-btn:hover {
+            background-color: var(--blue-hover);
+            transform: translateY(-1px);
+        }
+
+        /* Insights & Habits Styles */
+        .habit-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0 8px;
+        }
+
+        .habit-toggle input {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .stat-card {
+            background: var(--bg-body);
+            padding: 16px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .stat-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 24px;
+            color: var(--blue-primary);
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        /* The 2x2 Grid */
+        .matrix {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .quadrant {
+            background: var(--bg-surface);
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            min-height: 280px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #q1-container { background-color: var(--q1-bg); border-color: var(--q1-border); }
+        #q2-container { background-color: var(--q2-bg); border-color: var(--q2-border); }
+        #q3-container { background-color: var(--q3-bg); border-color: var(--q3-border); }
+        #q4-container { background-color: var(--q4-bg); border-color: var(--q4-border); }
+
+        .quadrant:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+            transform: translateY(-2px);
+        }
+
+        .quadrant.drag-over {
+            filter: brightness(0.95);
+            border-style: dashed;
+            border-color: var(--blue-primary) !important;
+        }
+
+        .quadrant h2 {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        /* Task Items */
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            animation: slideIn 0.3s ease forwards;
+            border: 1px solid var(--border-light);
+            background: var(--bg-surface);
+            cursor: grab;
+        }
+
+        .task-item:active { cursor: grabbing; }
+
+        .task-item.dragging {
+            opacity: 0.5;
+            background: var(--blue-light);
+            border: 1px dashed var(--blue-primary);
+        }
+
+        .task-item:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .task-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+            margin-right: 15px;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .task-text {
+            font-size: 15px;
+            line-height: 1.4;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+        }
+
+        /* Tags */
+        .tag {
+            font-size: 10px;
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: white;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+        .tag-work { background-color: var(--blue-primary); }
+        .tag-personal { background-color: #ffb4a2; /* Pastel peach/coral */ color: #fff; }
+        .tag-none { display: none; }
+
+        /* The Timestamp Pill */
+        .task-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            width: fit-content;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        /* Actions */
+        .task-actions {
+            display: flex;
+            gap: 6px;
+            opacity: 0; 
+            transition: var(--transition);
+        }
+
+        .task-item:hover .task-actions { opacity: 1; }
+
+        .task-actions button {
+            background: transparent;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: var(--bg-surface);
+        }
+
+        .task-actions button:hover {
+            color: var(--blue-primary);
+            border-color: var(--blue-primary);
+        }
+        
+        .task-actions button.focus-btn:hover {
+            color: #8b5cf6; /* Purple */
+            border-color: #8b5cf6;
+        }
+
+        .task-actions button.complete-btn:hover {
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        /* Modals */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.7); /* Darker backdrop for focus */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal {
+            background: var(--bg-surface);
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 12px;
+        }
+
+        .modal-header h2 { margin: 0; font-size: 18px; font-weight: 500; }
+        .close-btn { cursor: pointer; background: none; border: none; font-size: 20px; color: var(--text-muted); }
+
+        .archived-item {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            padding: 8px 0;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Pomodoro Timer Styles */
+        .timer-display {
+            font-size: 72px;
+            font-weight: 300;
+            color: var(--text-main);
+            margin: 20px 0 10px 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-settings {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .timer-settings input {
+            width: 70px;
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .timer-settings input:focus {
+            border-color: var(--blue-primary);
+        }
+        
+        .timer-task-name {
+            font-size: 16px;
+            color: var(--blue-primary);
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .matrix { grid-template-columns: 1fr; }
+            .header-top { flex-direction: column; gap: 16px; }
+            .filter-bar { flex-direction: column; align-items: flex-start; }
+            .search-box { max-width: 100%; width: 100%; }
+            .task-actions { opacity: 1; } 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="header-top">
+            <div style="width: 250px;"></div> <!-- Spacer for balance -->
+            <h1>CLARITY</h1>
+            <div class="top-actions">
+                <button class="secondary-btn" onclick="toggleInsights()">📊 Insights</button>
+                <button class="secondary-btn" onclick="exportCSV()">Export CSV</button>
+                <button class="secondary-btn" onclick="toggleArchive()">View Archive</button>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <input type="text" id="taskInput" placeholder="What needs to be done?">
+            <select id="tagSelect">
+                <option value="none">No Tag</option>
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+            </select>
+            <select id="quadrantSelect">
+                <option value="q1">Do First (Urgent & Important)</option>
+                <option value="q2">Schedule (Important, Not Urgent)</option>
+                <option value="q3">Delegate (Urgent, Not Important)</option>
+                <option value="q4">Eliminate (Neither)</option>
+            </select>
+            <label class="habit-toggle">
+                <input type="checkbox" id="habitCheck">
+                🔁 Daily
+            </label>
+            <button class="primary-btn" onclick="addTask()">Add Task</button>
+        </div>
+
+        <div class="filter-bar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search tasks..." onkeyup="handleSearch()">
+            </div>
+            <div class="filter-pills">
+                <button class="filter-pill active" id="filter-all" onclick="setFilter('all')">All</button>
+                <button class="filter-pill" id="filter-work" onclick="setFilter('work')">Work</button>
+                <button class="filter-pill" id="filter-personal" onclick="setFilter('personal')">Personal</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="matrix">
+        <div class="quadrant" id="q1-container" ondrop="drop(event, 'q1')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+            <h2>Do First</h2>
+            <ul class="task-list" id="q1"></ul>
+        </div>
+        <div class="quadrant" id="q2-container" ondrop="drop(event, 'q2')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+            <h2>Schedule</h2>
+            <ul class="task-list" id="q2"></ul>
+        </div>
+        <div class="quadrant" id="q3-container" ondrop="drop(event, 'q3')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+            <h2>Delegate</h2>
+            <ul class="task-list" id="q3"></ul>
+        </div>
+        <div class="quadrant" id="q4-container" ondrop="drop(event, 'q4')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+            <h2>Eliminate</h2>
+            <ul class="task-list" id="q4"></ul>
+        </div>
+    </div>
+</div>
+
+<!-- Archive Modal -->
+<div class="modal-overlay" id="archiveModal">
+    <div class="modal" style="text-align: left;">
+        <div class="modal-header">
+            <h2>Completed Tasks</h2>
+            <button class="close-btn" onclick="toggleArchive()">×</button>
+        </div>
+        <div id="archiveList">
+            <!-- Completed tasks go here -->
+        </div>
+    </div>
+</div>
+
+<!-- Insights Modal -->
+<div class="modal-overlay" id="insightsModal">
+    <div class="modal" style="text-align: left;">
+        <div class="modal-header">
+            <h2>Productivity Insights</h2>
+            <button class="close-btn" onclick="toggleInsights()">×</button>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 id="statTotalDone">0</h3>
+                <p>Total Completed</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="statWorkDone">0</h3>
+                <p>Work Tasks Done</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="statPersonalDone">0</h3>
+                <p>Personal Tasks Done</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="statActive">0</h3>
+                <p>Active Tasks</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Timer Modal -->
+<div class="modal-overlay" id="timerModal">
+    <div class="modal">
+        <div class="modal-header" style="justify-content: flex-end; border-bottom: none;">
+            <button class="close-btn" onclick="closeTimer()">×</button>
+        </div>
+        <h2>Focus Session</h2>
+        <div class="timer-task-name" id="timerTaskName">Task Name Here</div>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        
+        <div class="timer-settings">
+            <label for="timerDuration">Duration (minutes):</label>
+            <input type="number" id="timerDuration" value="25" min="1" max="120" onchange="updateTimerDuration()">
+        </div>
+
+        <div class="timer-controls">
+            <button class="primary-btn" id="startTimerBtn" onclick="toggleTimer()">Start Focus</button>
+            <button class="secondary-btn" onclick="resetTimer()">Reset</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- 1. STATE & INIT ---
+    let tasks = [];
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    try {
+        // Fallback to load older v3 data if available so you don't lose tasks
+        const savedData = localStorage.getItem('v4MatrixTasks') || localStorage.getItem('v3MatrixTasks'); 
+        if (savedData) tasks = JSON.parse(savedData);
+    } catch (e) {
+        console.error("Local storage error:", e);
+    }
+
+    function getFormattedTimestamp() {
+        const date = new Date();
+        const options = { month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
+        let formattedStr = date.toLocaleDateString('en-US', options).replace(',', ''); 
+        const parts = formattedStr.split(' ');
+        if (parts.length >= 4) return `${parts[0].toUpperCase()} ${parts[1]}, ${parts[2]} ${parts[3]}`;
+        return date.toLocaleDateString() + " " + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+
+    // --- 2. RENDER LOGIC ---
+    function renderTasks() {
+        document.getElementById('q1').innerHTML = '';
+        document.getElementById('q2').innerHTML = '';
+        document.getElementById('q3').innerHTML = '';
+        document.getElementById('q4').innerHTML = '';
+        document.getElementById('archiveList').innerHTML = '';
+
+        let archiveCount = 0;
+
+        tasks.forEach(task => {
+            // Archive Render
+            if (task.status === 'completed') {
+                const archiveEl = document.createElement('div');
+                archiveEl.className = 'archived-item';
+                archiveEl.innerHTML = `<span>${task.text}</span> <span>${task.timestamp}</span>`;
+                document.getElementById('archiveList').appendChild(archiveEl);
+                archiveCount++;
+                return; 
+            }
+
+            // --- FILTERING LOGIC ---
+            const taskTag = task.tag || 'none'; // Safe fallback for older tasks
+            // Tag Filter
+            if (currentFilter !== 'all' && taskTag !== currentFilter) return;
+            // Search Filter
+            if (searchQuery !== '' && !task.text.toLowerCase().includes(searchQuery)) return;
+
+            // Matrix Render
+            const li = document.createElement('li');
+            li.className = 'task-item';
+            li.draggable = true;
+            li.dataset.id = task.id; 
+            li.ondragstart = dragStart;
+            li.ondragend = dragEnd;
+            
+            // Only Do First (q1) tasks get the focus timer button
+            const focusButton = task.quadrant === 'q1' ? 
+                `<button class="focus-btn" onclick="openTimer(${task.id})">⏱️ Focus</button>` : '';
+
+            // Make tag text explicit
+            const tagText = taskTag === 'work' ? 'WORK' : (taskTag === 'personal' ? 'PERSONAL' : '');
+            
+            // Check if stale (older than 3 days in Schedule or Delegate)
+            const daysOld = task.createdAt ? (Date.now() - task.createdAt) / (1000 * 60 * 60 * 24) : 0;
+            const isStale = daysOld > 3 && (task.quadrant === 'q2' || task.quadrant === 'q3');
+            const staleBadge = isStale ? `<span class="tag" style="background:#ffadad; color:#8c2b2b;" title="This task has been sitting here for days!">⚠️ STALE</span>` : '';
+            
+            // Habit indicator
+            const habitIcon = task.isHabit ? `<span title="Daily Habit" style="font-size: 14px; margin-left: 4px; cursor: help;">🔁</span>` : '';
+
+            li.innerHTML = `
+                <div class="task-content">
+                    <div class="task-header">
+                        <span class="tag tag-${taskTag}">${tagText}</span>
+                        ${staleBadge}
+                        <span class="task-text">${task.text} ${habitIcon}</span>
+                    </div>
+                    <span class="task-date">${task.timestamp}</span>
+                </div>
+                <div class="task-actions">
+                    ${focusButton}
+                    <button onclick="editTask(${task.id})">Edit</button>
+                    <button class="complete-btn" onclick="completeTask(${task.id})">✓ Done</button>
+                </div>
+            `;
+            document.getElementById(task.quadrant).appendChild(li);
+        });
+
+        if (archiveCount === 0) {
+            document.getElementById('archiveList').innerHTML = '<p style="color:#64748b; text-align:center; font-size:14px;">No completed tasks yet.</p>';
+        }
+    }
+
+    // --- 3. FILTER & SEARCH HANDLERS ---
+    function setFilter(tag) {
+        currentFilter = tag;
+        // Update UI pills
+        document.querySelectorAll('.filter-pill').forEach(pill => pill.classList.remove('active'));
+        document.getElementById(`filter-${tag}`).classList.add('active');
+        renderTasks();
+    }
+
+    function handleSearch() {
+        searchQuery = document.getElementById('searchInput').value.toLowerCase();
+        renderTasks();
+    }
+
+    // --- 4. CRUD OPERATIONS ---
+    function addTask() {
+        const input = document.getElementById('taskInput');
+        const quadrant = document.getElementById('quadrantSelect');
+        const tag = document.getElementById('tagSelect');
+        const isHabit = document.getElementById('habitCheck').checked;
+        const text = input.value.trim();
+
+        if (text === '') return; 
+
+        const newTask = {
+            id: Date.now(), 
+            text: text,
+            quadrant: quadrant.value,
+            tag: tag.value,
+            status: 'active',
+            timestamp: getFormattedTimestamp(),
+            createdAt: Date.now(),
+            isHabit: isHabit
+        };
+
+        tasks.push(newTask);
+        
+        // Reset the inputs so they don't get stuck
+        input.value = ''; 
+        tag.value = 'none';
+        document.getElementById('habitCheck').checked = false;
+
+        // Auto-switch filter back to 'All' so you can see your newly created task
+        if (currentFilter !== 'all') {
+            setFilter('all'); 
+        } else {
+            saveAndRender();
+        }
+    }
+
+    function completeTask(id) {
+        // Changed to loose equality (==) to prevent strict type bugs
+        const task = tasks.find(t => t.id == id);
+        if (task) { 
+            task.status = 'completed'; 
+            
+            // Regenerate if it's a daily habit
+            if (task.isHabit) {
+                tasks.push({
+                    id: Date.now(), 
+                    text: task.text,
+                    quadrant: task.quadrant, // Keeps it in the same quadrant
+                    tag: task.tag,
+                    status: 'active',
+                    timestamp: getFormattedTimestamp(),
+                    createdAt: Date.now(),
+                    isHabit: true
+                });
+            }
+            
+            saveAndRender(); 
+        }
+    }
+
+    function editTask(id) {
+        // Changed to loose equality (==) and added a safety check
+        const taskToEdit = tasks.find(t => t.id == id);
+        if (!taskToEdit) return; // Failsafe if task isn't found
+        
+        const newText = prompt("Update your task:", taskToEdit.text);
+        if (newText !== null && newText.trim() !== '') {
+            taskToEdit.text = newText.trim();
+            saveAndRender();
+        }
+    }
+
+    function saveAndRender() {
+        try { localStorage.setItem('v4MatrixTasks', JSON.stringify(tasks)); } catch (e) {}
+        renderTasks();
+    }
+
+    // --- 5. DRAG AND DROP ---
+    function dragStart(e) {
+        e.dataTransfer.setData("text/plain", e.target.dataset.id);
+        setTimeout(() => e.target.classList.add('dragging'), 0);
+    }
+    function dragEnd(e) {
+        e.target.classList.remove('dragging');
+        document.querySelectorAll('.quadrant').forEach(q => q.classList.remove('drag-over'));
+    }
+    function allowDrop(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+    function dragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+    function drop(e, targetQuadrantId) {
+        e.preventDefault();
+        e.currentTarget.classList.remove('drag-over');
+        const taskId = e.dataTransfer.getData("text/plain");
+        const taskIndex = tasks.findIndex(t => t.id == taskId);
+        if (taskIndex > -1) { tasks[taskIndex].quadrant = targetQuadrantId; saveAndRender(); }
+    }
+
+    // --- 6. EXPORT CSV LOGIC ---
+    function exportCSV() {
+        if (tasks.length === 0) {
+            alert("No tasks to export!");
+            return;
+        }
+
+        // CSV Headers
+        const headers = ["ID", "Task", "Quadrant", "Tag", "Status", "Date Added"];
+        
+        // Map tasks to CSV rows (wrapping text in quotes to handle commas)
+        const rows = tasks.map(t => {
+            const safeText = t.text.replace(/"/g, '""'); // Escape inner quotes
+            return `${t.id},"${safeText}",${t.quadrant},${t.tag},${t.status},"${t.timestamp}"`;
+        });
+
+        const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
+        const encodedUri = encodeURI(csvContent);
+        
+        // Create an invisible download link
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "studio_matrix_export.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link); // Clean up
+    }
+
+    // --- 7. POMODORO TIMER LOGIC ---
+    let timerInterval;
+    let timeRemaining = 25 * 60; // 25 mins in seconds
+    let isRunning = false;
+
+    function openTimer(taskId) {
+        // Changed to loose equality (==)
+        const task = tasks.find(t => t.id == taskId);
+        if(!task) return;
+        
+        document.getElementById('timerTaskName').innerText = task.text;
+        document.getElementById('timerModal').style.display = 'flex';
+        resetTimer();
+    }
+
+    function closeTimer() {
+        document.getElementById('timerModal').style.display = 'none';
+        clearInterval(timerInterval);
+        isRunning = false;
+    }
+
+    function updateTimerDuration() {
+        if (isRunning) return; // Prevent changing time while running
+        const mins = parseInt(document.getElementById('timerDuration').value) || 25;
+        timeRemaining = mins * 60;
+        updateTimerDisplay();
+    }
+
+    function updateTimerDisplay() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        document.getElementById('timerDisplay').innerText = 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function toggleTimer() {
+        const btn = document.getElementById('startTimerBtn');
+        const durationInput = document.getElementById('timerDuration');
+        
+        if (isRunning) {
+            clearInterval(timerInterval);
+            btn.innerText = "Resume";
+            btn.style.backgroundColor = "var(--blue-primary)";
+            isRunning = false;
+            durationInput.disabled = false;
+        } else {
+            btn.innerText = "Pause";
+            btn.style.backgroundColor = "#ffcf81"; // Pastel amber color for pause
+            isRunning = true;
+            durationInput.disabled = true; // Lock input while running
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    isRunning = false;
+                    durationInput.disabled = false;
+                    btn.innerText = "Session Complete!";
+                    btn.style.backgroundColor = "var(--success)";
+                }
+            }, 1000);
+        }
+    }
+
+    function resetTimer() {
+        clearInterval(timerInterval);
+        const mins = parseInt(document.getElementById('timerDuration').value) || 25;
+        timeRemaining = mins * 60;
+        isRunning = false;
+        
+        document.getElementById('timerDuration').disabled = false;
+        const btn = document.getElementById('startTimerBtn');
+        btn.innerText = "Start Focus";
+        btn.style.backgroundColor = "var(--blue-primary)";
+        updateTimerDisplay();
+    }
+
+    // --- MODALS (ARCHIVE & INSIGHTS) ---
+    function toggleArchive() {
+        const modal = document.getElementById('archiveModal');
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function toggleInsights() {
+        const modal = document.getElementById('insightsModal');
+        if (modal.style.display !== 'flex') {
+            // Calculate stats before showing
+            const totalDone = tasks.filter(t => t.status === 'completed').length;
+            const workDone = tasks.filter(t => t.status === 'completed' && t.tag === 'work').length;
+            const personalDone = tasks.filter(t => t.status === 'completed' && t.tag === 'personal').length;
+            const activeCount = tasks.filter(t => t.status === 'active').length;
+
+            document.getElementById('statTotalDone').innerText = totalDone;
+            document.getElementById('statWorkDone').innerText = workDone;
+            document.getElementById('statPersonalDone').innerText = personalDone;
+            document.getElementById('statActive').innerText = activeCount;
+            
+            modal.style.display = 'flex';
+        } else {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Close modals on outside click
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('archiveModal')) toggleArchive();
+        if (event.target == document.getElementById('insightsModal')) toggleInsights();
+        if (event.target == document.getElementById('timerModal')) closeTimer();
+    }
+
+    document.getElementById('taskInput').addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
+
+    // Initial render
+    renderTasks();
+</script>
+
+</body>
+</html>
