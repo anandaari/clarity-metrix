@@ -9,27 +9,26 @@
 
         /* Minimalist Pastel Theme */
         :root {
-            --bg-body: #fdfbf7; /* Warm soft cream */
-            --bg-surface: #ffffff; /* Pure white for cards */
+            --bg-body: #fdfbf7; 
+            --bg-surface: #ffffff; 
             --text-main: #334155;
             --text-muted: #8ca3ba;
             --border-light: #e8eef3; 
-            --blue-primary: #a3b1c6; /* Dusty pastel blue */
+            --blue-primary: #a3b1c6; 
             --blue-hover: #8e9db3;
             --blue-light: #f4f6f9;
-            --success: #b5c99a; /* Pastel sage */
+            --success: #b5c99a; 
             --radius-md: 10px;
             --radius-lg: 16px;
             --transition: all 0.25s ease-in-out;
             
-            /* Quadrant Pastel Colors */
-            --q1-bg: #fff5f5; /* Soft blush */
+            --q1-bg: #fff5f5; 
             --q1-border: #ffe3e3;
-            --q2-bg: #f5f7ff; /* Soft periwinkle */
+            --q2-bg: #f5f7ff; 
             --q2-border: #e3e8ff;
-            --q3-bg: #fffbf0; /* Soft buttermilk */
+            --q3-bg: #fffbf0; 
             --q3-border: #ffecb3;
-            --q4-bg: #f4fbf4; /* Soft mint */
+            --q4-bg: #f4fbf4; 
             --q4-border: #dff2df;
         }
 
@@ -70,7 +69,7 @@
 
         h1 {
             font-family: 'Montserrat', sans-serif;
-            font-weight: 500; /* Increased from 200 to 500 for a bolder, more balanced look */
+            font-weight: 500;
             font-size: 32px;
             letter-spacing: 8px;
             margin: 0;
@@ -355,7 +354,7 @@
             align-items: center;
         }
 
-        /* Tags */
+        /* Tags and Status Badges */
         .tag {
             font-size: 10px;
             padding: 3px 6px;
@@ -367,8 +366,42 @@
             display: inline-block;
         }
         .tag-work { background-color: var(--blue-primary); }
-        .tag-personal { background-color: #ffb4a2; /* Pastel peach/coral */ color: #fff; }
+        .tag-personal { background-color: #ffb4a2; color: #fff; }
         .tag-none { display: none; }
+
+        .status-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid transparent;
+            user-select: none;
+        }
+        
+        .status-pending {
+            background-color: transparent;
+            color: var(--text-muted);
+            border-color: var(--border-light);
+        }
+        
+        .status-pending:hover {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+        }
+        
+        .status-in-progress {
+            background-color: #e0e7ff; /* Soft indigo pastel */
+            color: #4f46e5;
+            border-color: #c7d2fe;
+        }
+        
+        .status-in-progress:hover {
+            filter: brightness(0.95);
+        }
 
         /* The Timestamp Pill */
         .task-date {
@@ -411,7 +444,7 @@
         }
         
         .task-actions button.focus-btn:hover {
-            color: #8b5cf6; /* Purple */
+            color: #8b5cf6; 
             border-color: #8b5cf6;
         }
 
@@ -425,7 +458,7 @@
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.7); /* Darker backdrop for focus */
+            background: rgba(15, 23, 42, 0.7); 
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -528,7 +561,7 @@
 <div class="container">
     <header>
         <div class="header-top">
-            <div style="width: 250px;"></div> <!-- Spacer for balance -->
+            <div style="width: 250px;"></div> 
             <h1>CLARITY</h1>
             <div class="top-actions">
                 <button class="secondary-btn" onclick="toggleInsights()">📊 Insights</button>
@@ -589,20 +622,16 @@
     </div>
 </div>
 
-<!-- Archive Modal -->
 <div class="modal-overlay" id="archiveModal">
     <div class="modal" style="text-align: left;">
         <div class="modal-header">
             <h2>Completed Tasks</h2>
             <button class="close-btn" onclick="toggleArchive()">×</button>
         </div>
-        <div id="archiveList">
-            <!-- Completed tasks go here -->
-        </div>
+        <div id="archiveList"></div>
     </div>
 </div>
 
-<!-- Insights Modal -->
 <div class="modal-overlay" id="insightsModal">
     <div class="modal" style="text-align: left;">
         <div class="modal-header">
@@ -630,7 +659,6 @@
     </div>
 </div>
 
-<!-- Timer Modal -->
 <div class="modal-overlay" id="timerModal">
     <div class="modal">
         <div class="modal-header" style="justify-content: flex-end; border-bottom: none;">
@@ -659,8 +687,7 @@
     let searchQuery = '';
 
     try {
-        // Fallback to load older v3 data if available so you don't lose tasks
-        const savedData = localStorage.getItem('v4MatrixTasks') || localStorage.getItem('v3MatrixTasks'); 
+        const savedData = localStorage.getItem('v5MatrixTasks') || localStorage.getItem('v4MatrixTasks') || localStorage.getItem('v3MatrixTasks'); 
         if (savedData) tasks = JSON.parse(savedData);
     } catch (e) {
         console.error("Local storage error:", e);
@@ -686,7 +713,6 @@
         let archiveCount = 0;
 
         tasks.forEach(task => {
-            // Archive Render
             if (task.status === 'completed') {
                 const archiveEl = document.createElement('div');
                 archiveEl.className = 'archived-item';
@@ -696,14 +722,10 @@
                 return; 
             }
 
-            // --- FILTERING LOGIC ---
-            const taskTag = task.tag || 'none'; // Safe fallback for older tasks
-            // Tag Filter
+            const taskTag = task.tag || 'none'; 
             if (currentFilter !== 'all' && taskTag !== currentFilter) return;
-            // Search Filter
             if (searchQuery !== '' && !task.text.toLowerCase().includes(searchQuery)) return;
 
-            // Matrix Render
             const li = document.createElement('li');
             li.className = 'task-item';
             li.draggable = true;
@@ -711,25 +733,27 @@
             li.ondragstart = dragStart;
             li.ondragend = dragEnd;
             
-            // Only Do First (q1) tasks get the focus timer button
             const focusButton = task.quadrant === 'q1' ? 
                 `<button class="focus-btn" onclick="openTimer(${task.id})">⏱️ Focus</button>` : '';
 
-            // Make tag text explicit
             const tagText = taskTag === 'work' ? 'WORK' : (taskTag === 'personal' ? 'PERSONAL' : '');
             
-            // Check if stale (older than 3 days in Schedule or Delegate)
+            // Progress Status Badge
+            const progStatus = task.progressStatus || 'pending';
+            const progText = progStatus === 'in-progress' ? 'IN PROGRESS' : 'PENDING';
+            const statusBadge = `<span class="status-badge status-${progStatus}" onclick="toggleProgress(${task.id})" title="Click to toggle progress">${progText}</span>`;
+
             const daysOld = task.createdAt ? (Date.now() - task.createdAt) / (1000 * 60 * 60 * 24) : 0;
             const isStale = daysOld > 3 && (task.quadrant === 'q2' || task.quadrant === 'q3');
             const staleBadge = isStale ? `<span class="tag" style="background:#ffadad; color:#8c2b2b;" title="This task has been sitting here for days!">⚠️ STALE</span>` : '';
             
-            // Habit indicator
             const habitIcon = task.isHabit ? `<span title="Daily Habit" style="font-size: 14px; margin-left: 4px; cursor: help;">🔁</span>` : '';
 
             li.innerHTML = `
                 <div class="task-content">
                     <div class="task-header">
-                        <span class="tag tag-${taskTag}">${tagText}</span>
+                        ${tagText ? `<span class="tag tag-${taskTag}">${tagText}</span>` : ''}
+                        ${statusBadge}
                         ${staleBadge}
                         <span class="task-text">${task.text} ${habitIcon}</span>
                     </div>
@@ -752,7 +776,6 @@
     // --- 3. FILTER & SEARCH HANDLERS ---
     function setFilter(tag) {
         currentFilter = tag;
-        // Update UI pills
         document.querySelectorAll('.filter-pill').forEach(pill => pill.classList.remove('active'));
         document.getElementById(`filter-${tag}`).classList.add('active');
         renderTasks();
@@ -779,6 +802,7 @@
             quadrant: quadrant.value,
             tag: tag.value,
             status: 'active',
+            progressStatus: 'pending', // Defaults to pending
             timestamp: getFormattedTimestamp(),
             createdAt: Date.now(),
             isHabit: isHabit
@@ -786,12 +810,10 @@
 
         tasks.push(newTask);
         
-        // Reset the inputs so they don't get stuck
         input.value = ''; 
         tag.value = 'none';
         document.getElementById('habitCheck').checked = false;
 
-        // Auto-switch filter back to 'All' so you can see your newly created task
         if (currentFilter !== 'all') {
             setFilter('all'); 
         } else {
@@ -800,33 +822,30 @@
     }
 
     function completeTask(id) {
-        // Changed to loose equality (==) to prevent strict type bugs
         const task = tasks.find(t => t.id == id);
         if (task) { 
             task.status = 'completed'; 
             
-            // Regenerate if it's a daily habit
             if (task.isHabit) {
                 tasks.push({
                     id: Date.now(), 
                     text: task.text,
-                    quadrant: task.quadrant, // Keeps it in the same quadrant
+                    quadrant: task.quadrant, 
                     tag: task.tag,
                     status: 'active',
+                    progressStatus: 'pending', // Reset progress for the habit
                     timestamp: getFormattedTimestamp(),
                     createdAt: Date.now(),
                     isHabit: true
                 });
             }
-            
             saveAndRender(); 
         }
     }
 
     function editTask(id) {
-        // Changed to loose equality (==) and added a safety check
         const taskToEdit = tasks.find(t => t.id == id);
-        if (!taskToEdit) return; // Failsafe if task isn't found
+        if (!taskToEdit) return; 
         
         const newText = prompt("Update your task:", taskToEdit.text);
         if (newText !== null && newText.trim() !== '') {
@@ -835,8 +854,16 @@
         }
     }
 
+    function toggleProgress(id) {
+        const task = tasks.find(t => t.id == id);
+        if (task) {
+            task.progressStatus = task.progressStatus === 'in-progress' ? 'pending' : 'in-progress';
+            saveAndRender();
+        }
+    }
+
     function saveAndRender() {
-        try { localStorage.setItem('v4MatrixTasks', JSON.stringify(tasks)); } catch (e) {}
+        try { localStorage.setItem('v5MatrixTasks', JSON.stringify(tasks)); } catch (e) {}
         renderTasks();
     }
 
@@ -866,36 +893,38 @@
             return;
         }
 
-        // CSV Headers
-        const headers = ["ID", "Task", "Quadrant", "Tag", "Status", "Date Added"];
-        
-        // Map tasks to CSV rows (wrapping text in quotes to handle commas)
+        const headers = ["ID", "Task", "Quadrant", "Tag", "Status", "Progress", "Date Added"];
         const rows = tasks.map(t => {
-            const safeText = t.text.replace(/"/g, '""'); // Escape inner quotes
-            return `${t.id},"${safeText}",${t.quadrant},${t.tag},${t.status},"${t.timestamp}"`;
+            const safeText = t.text.replace(/"/g, '""'); 
+            const prog = t.progressStatus || 'pending';
+            return `${t.id},"${safeText}",${t.quadrant},${t.tag},${t.status},${prog},"${t.timestamp}"`;
         });
 
         const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
         const encodedUri = encodeURI(csvContent);
         
-        // Create an invisible download link
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "studio_matrix_export.csv");
+        link.setAttribute("download", "clarity_matrix_export.csv");
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link); // Clean up
+        document.body.removeChild(link); 
     }
 
     // --- 7. POMODORO TIMER LOGIC ---
     let timerInterval;
-    let timeRemaining = 25 * 60; // 25 mins in seconds
+    let timeRemaining = 25 * 60; 
     let isRunning = false;
 
     function openTimer(taskId) {
-        // Changed to loose equality (==)
         const task = tasks.find(t => t.id == taskId);
         if(!task) return;
+        
+        // Auto-set task to In Progress when you open the focus timer!
+        if (task.progressStatus !== 'in-progress') {
+            task.progressStatus = 'in-progress';
+            saveAndRender();
+        }
         
         document.getElementById('timerTaskName').innerText = task.text;
         document.getElementById('timerModal').style.display = 'flex';
@@ -909,7 +938,7 @@
     }
 
     function updateTimerDuration() {
-        if (isRunning) return; // Prevent changing time while running
+        if (isRunning) return; 
         const mins = parseInt(document.getElementById('timerDuration').value) || 25;
         timeRemaining = mins * 60;
         updateTimerDisplay();
@@ -934,9 +963,9 @@
             durationInput.disabled = false;
         } else {
             btn.innerText = "Pause";
-            btn.style.backgroundColor = "#ffcf81"; // Pastel amber color for pause
+            btn.style.backgroundColor = "#ffcf81"; 
             isRunning = true;
-            durationInput.disabled = true; // Lock input while running
+            durationInput.disabled = true; 
             
             timerInterval = setInterval(() => {
                 timeRemaining--;
@@ -975,7 +1004,6 @@
     function toggleInsights() {
         const modal = document.getElementById('insightsModal');
         if (modal.style.display !== 'flex') {
-            // Calculate stats before showing
             const totalDone = tasks.filter(t => t.status === 'completed').length;
             const workDone = tasks.filter(t => t.status === 'completed' && t.tag === 'work').length;
             const personalDone = tasks.filter(t => t.status === 'completed' && t.tag === 'personal').length;
@@ -992,7 +1020,6 @@
         }
     }
 
-    // Close modals on outside click
     window.onclick = function(event) {
         if (event.target == document.getElementById('archiveModal')) toggleArchive();
         if (event.target == document.getElementById('insightsModal')) toggleInsights();
@@ -1001,7 +1028,6 @@
 
     document.getElementById('taskInput').addEventListener('keypress', e => { if (e.key === 'Enter') addTask(); });
 
-    // Initial render
     renderTasks();
 </script>
 
